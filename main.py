@@ -25,7 +25,7 @@ def part_two():
 	df = read_data()
 
 	rolling_average_with_date = get_rolling_averages(df, AVG_LENGTH, NUMBER_OF_DAYS)
-	
+
 	plt.plot(*zip(*rolling_average_with_date))
 	plt.gca().xaxis.set_major_locator(plt.MultipleLocator(6))
 	plt.title('Total rolling 7 day average over past 30 days')
@@ -37,24 +37,9 @@ def part_two():
 NUMBER_OF_STATES = 10
 def part_three():
 	df = read_data()
+	top_ten_states = get_top_states_by_positivity_rate(df, NUMBER_OF_DAYS, NUMBER_OF_STATES)
+	print('Top ten positivity rates:', top_ten_states)
 
-	oldest_date = now - datetime.timedelta(days=NUMBER_OF_DAYS) # TODO: Different variable?
-	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
-
-	df = df[df.date > datestr]
-
-	unique_states = df.state.unique()
-	positivity_rate_with_state = []
-
-	for state in unique_states:
-		state_data = df[df.state == state]
-		total_tests = state_data['new_results_reported'].sum()
-		positive = state_data[state_data.overall_outcome == 'Positive']['new_results_reported'].sum()
-
-		positivity_rate_with_state.append((state, round(positive / total_tests, 2)))
-	
-	positivity_rate_with_state.sort(key=lambda a: a[1], reverse=True)
-	print('Top ten positivity rates:', positivity_rate_with_state[:NUMBER_OF_STATES])
 
 def read_data():
 	df = pd.read_csv('data/Dataset.csv', dtype={

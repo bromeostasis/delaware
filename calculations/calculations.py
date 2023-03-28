@@ -48,3 +48,23 @@ def get_rolling_averages(df, average_length, number_of_days):
 
 	return rolling_average_with_date
 
+def get_top_states_by_positivity_rate(df, number_of_days, number_of_states):
+	now = datetime.datetime.now()
+	oldest_date = now - datetime.timedelta(days=number_of_days)
+	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
+
+	df = df[df.date > datestr]
+
+	unique_states = df.state.unique()
+	positivity_rate_with_state = []
+
+	for state in unique_states:
+		state_data = df[df.state == state]
+		total_tests = state_data['new_results_reported'].sum()
+		positive = state_data[state_data.overall_outcome == 'Positive']['new_results_reported'].sum()
+
+		positivity_rate_with_state.append((state, round(positive / total_tests, 2)))
+	
+	positivity_rate_with_state.sort(key=lambda a: a[1], reverse=True)
+	return positivity_rate_with_state[:number_of_states]
+
