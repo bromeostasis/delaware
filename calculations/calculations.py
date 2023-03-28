@@ -32,8 +32,8 @@ def get_rolling_averages(df, average_length, number_of_days):
 	for i in range(dataset_length):
 		current_date = oldest_date + datetime.timedelta(days=i)
 		datestr = f'{current_date.year}-{current_date.month}-{current_date.day}'
-		new_tests_on_current_date = df.query(f'date == "{datestr}"')['new_results_reported'].sum()
-		total_new_case_queue.append(new_tests_on_current_date)
+		new_cases_on_current_date = df.query(f'date == "{datestr}" & overall_outcome == "Positive"')['new_results_reported'].sum()
+		total_new_case_queue.append(new_cases_on_current_date)
 		if len(total_new_case_queue) == average_length:
 			rolling_average_with_date.append((datestr, round(sum(total_new_case_queue) / average_length, 2)))
 			total_new_case_queue.pop(0)
