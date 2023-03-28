@@ -25,7 +25,7 @@ def get_rolling_averages(df, average_length, number_of_days):
 	oldest_date = now - datetime.timedelta(days=dataset_length)
 	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
 
-	df = df[df.date > datestr]
+	df = df[df.date >= datestr]
 
 	rolling_average_with_date = []
 	total_new_case_queue = []
@@ -45,7 +45,7 @@ def get_top_states_by_positivity_rate(df, number_of_days, number_of_states):
 	oldest_date = now - datetime.timedelta(days=number_of_days)
 	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
 
-	df = df[df.date > datestr]
+	df = df[df.date >= datestr]
 
 	unique_states = df.state.unique()
 	positivity_rate_with_state = []
