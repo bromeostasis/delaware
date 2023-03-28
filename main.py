@@ -13,7 +13,7 @@ def main():
 	part_three()
 
 def part_one():
-	df = pd.read_csv('data/Dataset.csv')
+	df = read_data()
 	df = df.sort_values(by='total_results_reported', ascending=False)
 
 	unique_states = df.state.unique()
@@ -37,20 +37,18 @@ def part_one():
 AVG_LENGTH = 7
 NUMBER_OF_DAYS = 30
 def part_two():
+	df = read_data()
+
 	# We start calculating on the seventh day, so subtract one
 	dataset_length = NUMBER_OF_DAYS - 1 + AVG_LENGTH
 	oldest_date = now - datetime.timedelta(days=dataset_length)
 	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
 
-	df = pd.read_csv('data/Dataset.csv')
 	df = df[df.date > datestr]
 
 	# results = client.get("j8mb-icvb", where=f'date >= "{datestr}"', limit=10000)
 
 	# df = pd.DataFrame.from_records(results)
-
-	df['date'] = pd.to_datetime(df['date'])
-	df['new_results_reported'] = pd.to_numeric(df['new_results_reported'])
 
 	# print(df.head())
 
@@ -78,13 +76,10 @@ def part_two():
 
 NUMBER_OF_STATES = 10
 def part_three():
-	df = pd.read_csv('data/Dataset.csv')
+	df = read_data()
 
 	oldest_date = now - datetime.timedelta(days=NUMBER_OF_DAYS) # TODO: Different variable?
 	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
-
-	df['date'] = pd.to_datetime(df['date'])
-	df['new_results_reported'] = pd.to_numeric(df['new_results_reported'])
 
 	df = df[df.date > datestr]
 
@@ -101,5 +96,20 @@ def part_three():
 	positivity_rate_with_state.sort(key=lambda a: a[1], reverse=True)
 	print('Top ten positivity rates:', positivity_rate_with_state[:NUMBER_OF_STATES])
 
+def read_data():
+	df = pd.read_csv('data/Dataset.csv', dtype={
+	    'state': 'string',
+	    'state_name': 'string',
+	    'state_fips': 'int64',
+	    'fema_region': 'string',
+	    'overall_outcome': 'string',
+	    'new_results_reported': 'int64',
+	    'total_results_reported': 'int64',
+	    'geocoded_state': 'float64',
+	})
+
+	df['date'] = pd.to_datetime(df['date'])
+
+	return df
 
 main()
