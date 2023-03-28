@@ -27,17 +27,9 @@ def get_rolling_averages(df, average_length, number_of_days):
 
 	df = df[df.date > datestr]
 
-	# results = client.get("j8mb-icvb", where=f'date >= "{datestr}"', limit=10000)
-
-	# df = pd.DataFrame.from_records(results)
-
-	# print(df.head())
-
 	rolling_average_with_date = []
 	total_new_case_queue = []
 	for i in range(dataset_length):
-		# print(i)
-		# print(oldest_date + datetime.timedelta(days=i))
 		current_date = oldest_date + datetime.timedelta(days=i)
 		datestr = f'{current_date.year}-{current_date.month}-{current_date.day}'
 		new_tests_on_current_date = df.query(f'date == "{datestr}"')['new_results_reported'].sum()
