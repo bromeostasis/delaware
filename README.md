@@ -28,7 +28,7 @@ Notes/assumptions for this calculation:
 
 Notes/assumptions for this calculation:
 
-* The past 2-3 days did not seem to have any data. I've left them in the calculation as a 0. I'm not sure if this is a recency issue (there's never data for the past 2-3 days) or there was a one-off issue. This impacts the positivity rate calculation as well.
+* The past 2-3 days did not seem to have any data. I've left them in the calculation as a 0 which significantly lowers the rolling average for those days. I'm not sure if this is a recency issue (there's never data for the past 2-3 days) or there was a one-off issue. This impacts the positivity rate calculation as well.
 * I've rounded averages to two decimal places.
 * The past 30 days does not include today.
 
