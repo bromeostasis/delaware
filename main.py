@@ -1,7 +1,12 @@
 import pandas as pd
+import datetime
+from sodapy import Socrata
+
+
+client = Socrata("healthdata.gov", None)
 
 def main():
-	part_one()
+	part_two()
 
 def part_one():
 	df = pd.read_csv('data/Dataset.csv')
@@ -25,5 +30,38 @@ def part_one():
 
 	print('total tests as of yesterday', total_tests)
 
+AVG_LENGTH = 7
+NUMBER_OF_DAYS = 30
+def part_two():
+	# We start calculating on the seventh day, so subtract one
+	dataset_length = NUMBER_OF_DAYS - 1 + AVG_LENGTH
+	now = datetime.datetime.now()
+	oldest_date = now - datetime.timedelta(days=dataset_length)
+
+	datestr = f'{oldest_date.year}-{oldest_date.month}-{oldest_date.day}' 
+
+	results = client.get("j8mb-icvb", where=f'date >= "{datestr}"', limit=10000)
+
+	df = pd.DataFrame.from_records(results)
+
+	df['date'] = pd.to_datetime(df['date'])
+	df['new_results_reported'] = pd.to_numeric(df['new_results_reported'])
+
+	# print(df.head())
+
+	rolling_average_with_date = []
+	total_new_case_queue = []
+	for i in range(dataset_length):
+		# print(i)
+		# print(oldest_date + datetime.timedelta(days=i))
+		current_date = oldest_date + datetime.timedelta(days=i)
+		datestr = f'{current_date.year}-{current_date.month}-{current_date.day}'
+		new_tests_on_current_date = df.query(f'date == "{datestr}"')['new_results_reported'].sum()
+		total_new_case_queue.append(new_tests_on_current_date)
+		if len(total_new_case_queue) == AVG_LENGTH:
+			rolling_average_with_date.append((datestr, round(sum(total_new_case_queue) / AVG_LENGTH, 2)))
+			total_new_case_queue.pop(0)
+
+	print('Rolling average for the past 30 days', rolling_average_with_date)
 
 main()
