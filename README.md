@@ -6,7 +6,8 @@ This repository houses my submission for the Delaware North take-home assignment
 This guide assumes you are on mac and have python3 installed. This solution was developed on Python 3.7.3 and has not been tested in other languages.
 
 1. Clone the repository
-1. Start the virtualenv: `source venv/bin/activate`
+1. Create a virtualenv if you'd like: `python3 -m venv my-venv`
+  1. If you did this step, activate it! `source my-venv/bin/activate`
 1. Install the required libraries: `pip install -r requirements.txt`
 1. Update the dataset* if desired. This can be exported via `csv` [here](https://healthdata.gov/dataset/COVID-19-Diagnostic-Laboratory-Testing-PCR-Testing/j8mb-icvb/explore/query/SELECT%0A%20%20%60state%60%2C%0A%20%20%60state_name%60%2C%0A%20%20%60state_fips%60%2C%0A%20%20%60fema_region%60%2C%0A%20%20%60overall_outcome%60%2C%0A%20%20%60date%60%2C%0A%20%20%60new_results_reported%60%2C%0A%20%20%60total_results_reported%60%2C%0A%20%20%60geocoded_state%60/page/filter). Once this is completed, replace the file in `data/Dataset.csv`. Please download all columns to ensure best results.
 1. Run the code: `python main.py`. This will produce the results for all three sections as well as a figure in `figures/rolling_averages.png`!
