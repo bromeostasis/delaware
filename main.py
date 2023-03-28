@@ -1,5 +1,7 @@
-import pandas as pd
 import datetime
+import pandas as pd
+import matplotlib.pyplot as plt
+
 from sodapy import Socrata
 
 client = Socrata("healthdata.gov", None)
@@ -65,7 +67,14 @@ def part_two():
 			rolling_average_with_date.append((datestr, round(sum(total_new_case_queue) / AVG_LENGTH, 2)))
 			total_new_case_queue.pop(0)
 
-	print('Rolling average for the past 30 days:', rolling_average_with_date)
+
+	plt.plot(*zip(*rolling_average_with_date))
+	plt.gca().xaxis.set_major_locator(plt.MultipleLocator(6))
+	plt.title('Total rolling 7 day average over past 30 days')
+	plt.xlabel('Date')
+	plt.ylabel('Rolling average (number of cases)')
+	plt.savefig(f'figures/rolling_average.png') 
+	print('Rolling average for the past 30 days (see figures/rolling_average.png for visualization):', rolling_average_with_date)
 
 NUMBER_OF_STATES = 10
 def part_three():
